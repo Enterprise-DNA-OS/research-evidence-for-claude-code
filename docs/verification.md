@@ -7,3 +7,9 @@ It exercises all 27 CLI commands, repeat migrations and seed, exact quotation ch
 The GitHub workflow runs the same test on Windows and Linux and on PostgreSQL. A workflow definition is not evidence of a completed run. This file records the test design; the run report records observed results.
 
 The fixture is synthetic. No live Dovetail account, actual customer export, Windows desktop or live business database is used by the local smoke suite. A real migration starts with a dry run and source reconciliation.
+
+## Observed on 24 October 2026
+
+The local Linux run passed 89 checks on Node 22 with PGlite. The same 89 checks passed on a fresh PostgreSQL 16.2 database. npm run demo, npm run docs and npm run view completed.
+
+[GitHub Actions run](https://github.com/Enterprise-DNA-OS/research-evidence-for-claude-code/actions/runs/40055095594) did not start its jobs because GitHub reported failed account payments or a spending limit. Windows and the hosted PostgreSQL 17 job are therefore unverified. No failed test assertion was reported by that run. The workflow remains available for rerun once the account restriction is resolved.
