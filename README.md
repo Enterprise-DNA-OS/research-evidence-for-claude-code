@@ -30,7 +30,7 @@ The fictional demo includes an overdue study review, contradictory interviews, a
 
 Review the study queue, trace findings to their source quotations, check permission and retention dates, prepare an internal brief and follow through on decisions. Search holds back sources that have not passed review. Another reviewer name approves a finding. Decisions require a currently usable approved finding. Withdrawing permission or importing revised text returns dependent findings to draft. Time-expired evidence disappears from approved briefs without deleting the source history.
 
-There are 27 CLI commands and 31 slash-command recipes. Every recurring job has one recipe in .claude/commands. All CLI output supports --json. Names match without case sensitivity; partial IDs work. Ambiguous matches list candidates and exit with code 1.
+There are 28 CLI commands and 32 slash-command recipes. Every recurring job has one recipe in .claude/commands. All CLI output supports --json. Names match without case sensitivity; partial IDs work. Ambiguous matches list candidates and exit with code 1.
 
 ## Ten questions this build answers
 
@@ -78,7 +78,7 @@ Change brand.json to your business name, logo and colours. npm run docs writes a
 
 ## Checks and boundaries
 
-npm test creates a disposable database, repeats migrations and seed, exercises all 27 commands, and checks imports, evidence gates, drafts, privacy filtering and HTML output. [Verification](docs/verification.md). Source-use checks support a responsible operator; they do not determine legal permission or certify compliance. [Rules and cited sources](docs/compliance.md).
+npm test creates a disposable database, repeats migrations and seed, exercises all 28 commands, and checks imports, evidence gates, drafts, privacy filtering and HTML output. [Verification](docs/verification.md). Source-use checks support a responsible operator; they do not determine legal permission or certify compliance. [Rules and cited sources](docs/compliance.md).
 
 The base works with text exports and explicit source references. It does not record interviews, transcribe media, reproduce collaborative tagging or connect to live channels. Enterprise DNA scopes those connections and a web view as part of a custom version.
 

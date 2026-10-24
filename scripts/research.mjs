@@ -18,7 +18,7 @@ export const reads={
  compliance:"select study,title,issue,'Record review required' as result from note_checks where not coalesce(usable,false) order by study,title",
  activity:'select entity,entity_id,action,actor,detail,created_at from activity order by created_at,id'
 };
-export const commands=[...Object.keys(reads),'help','show','search','evidence','weekly-review','add-study','add-note','add-finding','cite','review-note','approve-finding','add-decision','close-decision','log','import','export','draft-brief','draft-follow-up'];
+export const commands=[...Object.keys(reads),'help','show','search','evidence','weekly-review','add-study','review-study','add-note','add-finding','cite','review-note','approve-finding','add-decision','close-decision','log','import','export','draft-brief','draft-follow-up'];
 const tables={study:'studies',note:'notes',finding:'findings',decision:'decisions'};
 export function argsOf(args){const o={},pos=[];for(const a of args){if(a.startsWith('--')){const i=a.indexOf('=');const k=a.slice(2,i<0?undefined:i);if(Object.hasOwn(o,k))throw Error(`Repeated option --${k}`);o[k]=i<0?true:a.slice(i+1);}else pos.push(a);}return {o,pos};}
 const text=(o,k)=>{if(typeof o[k]!=='string'||!o[k].trim())throw Error(`Required --${k}=...`);return o[k].trim();};
@@ -35,7 +35,7 @@ function privateFile(file,body){fs.mkdirSync(path.dirname(file),{recursive:true,
 function outputPath(dir,o,ext){return path.join(REPO_ROOT,dir,`${new Date().toISOString().replace(/[:.]/g,'-')}-${randomUUID().slice(0,8)}.${ext}`);}
 
 export async function run(db,args){const {o,pos}=argsOf(args);const cmd=o.help?'help':pos[0]||'help';
- const options={show:['type','record','review-source'],search:['query'],evidence:['finding'],'add-study':['code','title','owner','purpose','review-due','actor'],'add-note':['study','title','body','participant','collected-on','url','actor'],'add-finding':['study','title','summary','owner','actor'],cite:['finding','note','quote','stance','actor'],'review-note':['note','permission','reviewed-on','retention-due','reference','actor'],'approve-finding':['finding','reason','actor','acknowledge-contradictions'],'add-decision':['finding','title','owner','due-on','actor'],'close-decision':['decision','outcome','actor'],log:['type','record','text','actor'],import:['study','kind','file','map','actor','dry-run'],'draft-brief':['study'],'draft-follow-up':['decision']};
+ const options={'review-study':['study','review-due','reason','actor'],show:['type','record','review-source'],search:['query'],evidence:['finding'],'add-study':['code','title','owner','purpose','review-due','actor'],'add-note':['study','title','body','participant','collected-on','url','actor'],'add-finding':['study','title','summary','owner','actor'],cite:['finding','note','quote','stance','actor'],'review-note':['note','permission','reviewed-on','retention-due','reference','actor'],'approve-finding':['finding','reason','actor','acknowledge-contradictions'],'add-decision':['finding','title','owner','due-on','actor'],'close-decision':['decision','outcome','actor'],log:['type','record','text','actor'],import:['study','kind','file','map','actor','dry-run'],'draft-brief':['study'],'draft-follow-up':['decision']};
  const booleans=['json','help','review-source','dry-run','acknowledge-contradictions'];
  for(const [key,value] of Object.entries(o)){if(!['json','help',...(options[cmd]||[])].includes(key))throw Error(`Unknown option --${key} for ${cmd}`);if(booleans.includes(key)&&value!==true)throw Error(`Use --${key} without a value`);if(!booleans.includes(key)&&typeof value!=='string')throw Error(`--${key} needs =value`);}
  if(pos.length>(cmd==='import'?2:1))throw Error('Unexpected positional argument; use named options');
@@ -64,6 +64,9 @@ export async function run(db,args){const {o,pos}=argsOf(args);const cmd=o.help?'
  if(cmd==='add-study'){
  const code=text(o,'code').toUpperCase();if(!/^[A-Z0-9-]+$/.test(code))throw Error('Code needs letters, digits or hyphens');
  [r]=await db.query('insert into studies(code,title,owner,purpose,review_due) values($1,$2,$3,$4,$5) returning *',[code,text(o,'title'),text(o,'owner'),text(o,'purpose'),date(text(o,'review-due'),'review-due')]);kind='study';
+ }else if(cmd==='review-study'){
+ const s=await lock(db,'study',text(o,'study'));const due=date(text(o,'review-due'),'review-due');if(due<today())throw Error('Next review cannot be in the past');
+ [r]=await db.query('update studies set review_due=$1 where id=$2 returning *',[due,s.id]);kind='study';detail=`Review date ${s.review_due} -> ${due}; ${text(o,'reason')}`;
  }else if(cmd==='add-note'){
  const s=await active(db,text(o,'study'));const collected=date(text(o,'collected-on'),'collected-on');if(collected>today())throw Error('Collection cannot be in the future');
  [r]=await db.query('insert into notes(study_id,source_key,title,body,participant,collected_on,source_url) values($1,$2,$3,$4,$5,$6,$7) returning id,title',[s.id,`local:${randomUUID()}`,text(o,'title'),text(o,'body'),o.participant||'',collected,o.url||'']);kind='note';detail='New note held for permission and retention review';

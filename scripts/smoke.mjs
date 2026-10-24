@@ -35,6 +35,9 @@ try{
  const actor='--actor=Tester';
  const [study]=await call('add-study','--code=TEST','--title=Test study','--owner=Owner','--purpose=Study the setup path',`--review-due=${future}`,actor);
  await reject(['add-study','--code=BAD','--title=Bad','--owner=Owner','--purpose=Test','--review-due=2026-02-30',actor],/Invalid/);
+ await call('review-study','--study=ONBOARD',`--review-due=${future}`,'--reason=Monday research review completed',actor);
+ check(!(await call('attention')).some(r=>r.kind==='study'&&r.title==='First-week onboarding'),'review resolves overdue study');
+ await reject(['review-study','--study=ONBOARD','--review-due=2020-01-01','--reason=Bad date',actor],/past/);
  const [note]=await call('add-note','--study=TEST','--title=New source','--body=Exact words, with a comma.','--participant=P-TEST',`--collected-on=${current}`,actor);
  const [finding]=await call('add-finding','--study=TEST','--title=New finding','--summary=Test the onboarding idea','--owner=Owner',actor);
  await reject(['cite',`--finding=${finding.id}`,`--note=${note.id}`,'--quote=Invented words','--stance=supports',actor],/Quote/);

@@ -29,6 +29,7 @@ Every answer starts with the CLI. Preserve exact quotations and contradictory ev
 | add finding | /add-finding |
 | cite | /cite |
 | review note | /review-note |
+| review study | /review-study |
 | approve finding | /approve-finding |
 | add decision | /add-decision |
 | close decision | /close-decision |
