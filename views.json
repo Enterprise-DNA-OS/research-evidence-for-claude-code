@@ -1,13 +1,30 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Research Evidence for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Research review this week",
+    "subtitle": "Fictional demo until your own records are imported",
     "sections": [
       {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "select kind,title,owner,due_on,issue from attention_queue order by due_on nulls last,title"
+      },
+      {
+        "title": "Evidence coverage",
+        "sql": "select study,title,usable_support,blocked_citations,contradictions,known_participants from finding_checks order by study,title"
+      },
+      {
+        "title": "Decisions",
+        "sql": "select title,owner,due_on,status,evidence_current from decision_queue order by due_on"
+      }
+    ]
+  },
+  {
+    "name": "retention",
+    "title": "Source review and retention",
+    "sections": [
+      {
+        "title": "Review queue",
+        "sql": "select study,title,permission,retention_due,issue from note_checks where not coalesce(usable,false) or retention_due<=current_date+30 order by retention_due nulls first,title"
       }
     ]
   }

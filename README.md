@@ -1,115 +1,87 @@
-<h1 align="center">Research Evidence for Claude Code</h1>
+# Research Evidence for Claude Code
 
-<p align="center">
-  <strong>The open-source research evidence system that is just a database and Claude Code.</strong>
-</p>
+Keep research studies, source notes, exact quotations, reviewed findings and decision follow-ups in a database you own.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free under MIT. Install and run the demo. | Your research fields, source exports, review rules and paperwork. | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your Dovetail data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=dovetail">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/dovetail?utm_source=github&utm_medium=readme&utm_campaign=dovetail">How it works</a></td>
-  </tr>
-</table>
+[Get your version built](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=dovetail) · [Instead of Dovetail](https://enterprisedna.co/omni/instead-of/dovetail?utm_source=github&utm_medium=readme&utm_campaign=dovetail)
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-dovetail">Instead of Dovetail</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
+## Start with a working review
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Research Evidence for Claude Code does the job you pay Dovetail for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the Dovetail dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays Dovetail per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=dovetail).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
-
-## Quick start
-
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later:
 
 ```bash
 git clone https://github.com/Enterprise-DNA-OS/research-evidence-for-claude-code.git
 cd research-evidence-for-claude-code
 npm install
 npm run demo
+npm run research -- evidence --finding="Test an import example"
+npm run docs
+npm run view
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Open this folder in Claude Code, Codex, OpenCode or Cursor. AGENTS.md and CLAUDE.md use the same recipes. PGlite runs locally. DATABASE_URL selects a dedicated PostgreSQL database; DATA_DIR changes the local directory. This is a trusted-operator workspace, not a shared public service. Never seed business data.
 
-### Use it with your own Postgres or Supabase
+The fictional demo includes an overdue study review, contradictory interviews, a stale source, a withdrawn source and an overdue decision. No customer records or real interviews are included. Demo dates are relative to the first seed run. Reseeding does not reset existing records.
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+## The weekly work
 
-## The commands
+Review the study queue, trace findings to their source quotations, check permission and retention dates, prepare an internal brief and follow through on decisions. Search holds back sources that have not passed review. Another reviewer name approves a finding. Decisions require a currently usable approved finding. Withdrawing permission or importing revised text returns dependent findings to draft. Time-expired evidence disappears from approved briefs without deleting the source history.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+There are 27 CLI commands and 31 slash-command recipes. Every recurring job has one recipe in .claude/commands. All CLI output supports --json. Names match without case sensitivity; partial IDs work. Ambiguous matches list candidates and exit with code 1.
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
+## Ten questions this build answers
 
-## Instead of dovetail
+These are demonstrated questions, not a claim that Dovetail cannot answer them.
 
-<!-- TODO(author): how to bring data across from Dovetail; link docs/replace-dovetail.md -->
+1. Which studies are overdue for an owner review? attention.
+2. Which findings have no usable supporting quotation? coverage.
+3. Which findings contain contradictory evidence? coverage and evidence.
+4. How many distinct recorded participant pseudonyms support the evidence base? coverage. Blank identities are not counted, and the count is not a representativeness score.
+5. Which sources need a retention decision in the next month? retention.
+6. Which interviews are held because their permission is unknown or withdrawn? compliance.
+7. What exact source passage supports this finding? evidence.
+8. Which decision follow-ups are late and who owns them? decisions.
+9. Which decisions now depend on evidence that needs another review? decisions.
+10. Who recorded a change or source-use decision? activity.
 
-## Architecture
+## Bring your Dovetail records across
 
+Use Dovetail's readable raw-data CSV export, inspect its actual headings, then import into a study in one command.
+
+```bash
+npm run research -- import dovetail --study=ONBOARD --file=imports/notes.csv --map=fixtures/dovetail-map.json --actor="Your name" --dry-run
 ```
-research-evidence-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
 
-## Built for coding agents
+Remove --dry-run after the counts and mapping agree. Use --kind=findings for a separate Docs export. Imports are atomic and repeatable; changed source text requires review again. The importer does not decode encrypted .dovetailproject archives or infer missing quotation links. [Export, mapping and reconciliation guide](docs/replace-dovetail.md).
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+## Paperwork and views
 
-## Contributing
+Change brand.json to your business name, logo and colours. npm run docs writes a study brief and a decision record as private HTML, ready to print after review. npm run view writes the week and retention dashboards. They are read-only files, not a front end. Drafts, exports and generated files stay out of git.
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+## Your first hour: ten things to ask for
 
-## Want it installed and run for you?
+1. Put our name on the study brief.
+2. Create our first study and its review owner.
+3. Check our Dovetail export headings.
+4. Import a small sample and reconcile every source URL.
+5. Show the sources awaiting permission review.
+6. Record the actual evidence for a source's permitted use.
+7. Attach a quotation and the evidence that contradicts it.
+8. Prepare a brief using only current approved findings.
+9. Record a decision owner and follow-up date.
+10. Add our research-method field with /customise.
 
-Enterprise DNA installs Research Evidence for Claude Code for your business, migrates your Dovetail data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+/new-view adds a read-only report. [What a screen adds](docs/why-no-front-end.md).
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=dovetail)
-- Read more: [enterprisedna.co/omni/instead-of/dovetail](https://enterprisedna.co/omni/instead-of/dovetail?utm_source=github&utm_medium=readme&utm_campaign=dovetail)
+## Checks and boundaries
 
-## License
+npm test creates a disposable database, repeats migrations and seed, exercises all 27 commands, and checks imports, evidence gates, drafts, privacy filtering and HTML output. [Verification](docs/verification.md). Source-use checks support a responsible operator; they do not determine legal permission or certify compliance. [Rules and cited sources](docs/compliance.md).
 
-MIT. Copyright (c) 2026 Enterprise DNA.
+The base works with text exports and explicit source references. It does not record interviews, transcribe media, reproduce collaborative tagging or connect to live channels. Enterprise DNA scopes those connections and a web view as part of a custom version.
+
+Dovetail's paid subscription is privately quoted. A historical UK contract establishes selection evidence, not a current tariff or an NZ/AU invoice. [Research and six scores](docs/research.md).
+
+MIT. Not affiliated with Dovetail or Anthropic. Hosting and coding-agent usage have their own costs.

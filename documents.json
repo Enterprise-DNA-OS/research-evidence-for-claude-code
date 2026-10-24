@@ -1,11 +1,39 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "study-brief",
+    "title": "Research study brief",
+    "for_each": "select id,title from studies order by code",
+    "file": "title",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Scope",
+        "sql": "select code,title,purpose,owner,review_due from studies where id=$1"
+      },
+      {
+        "title": "Findings ready for review",
+        "note": "Only approved findings with current source reviews appear. This is an internal review document, not permission to distribute participant data.",
+        "sql": "select title,summary,approved_by,approved_on,contradictions from approved_findings where study_id=$1 order by title"
+      },
+      {
+        "title": "Evidence",
+        "sql": "select f.title as finding,n.title as source,n.participant,c.stance,c.quote,n.source_url from approved_findings f join citations c on c.finding_id=f.id join note_checks n on n.id=c.note_id where f.study_id=$1 and n.usable and position(c.quote in n.body)>0 order by f.title,n.title"
+      }
+    ]
+  },
+  {
+    "name": "decision-record",
+    "title": "Research decision record",
+    "for_each": "select id,title from decisions order by due_on",
+    "file": "title",
+    "sections": [
+      {
+        "title": "Decision",
+        "sql": "select title,owner,due_on,status,outcome,evidence_current from decision_queue where id=$1"
+      },
+      {
+        "title": "Basis",
+        "sql": "select f.title,f.summary,f.approved_by,f.approved_on from approved_findings f join decisions d on d.finding_id=f.id where d.id=$1"
+      }
     ]
   }
 ]

@@ -1,43 +1,55 @@
 # Research Evidence for Claude Code: operating instructions
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+Read README.md and docs/replace-dovetail.md before using real records. This is a trusted-operator research workspace. The seed is fictional. Put the business identity in brand.json. Claude Code, Codex, OpenCode and Cursor use the same scripts.
 
-## Who this is for
+## Evidence first
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+Every answer starts with the CLI. Preserve exact quotations and contradictory evidence. Do not infer permission from an import, infer participant identity, invent an interview, or represent a small sample as representative. Use pseudonyms. Unreviewed, withdrawn, stale or overdue sources are held from search, ordinary note display and approved briefs. show --review-source explicitly opens a held source for the trusted operator's review. The full private export also includes held text. Neither is a permission to disclose it.
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+## One route per recurring job
 
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Request | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| studies | /studies |
+| notes | /notes |
+| findings | /findings |
+| decisions | /decisions |
+| coverage | /coverage |
+| retention | /retention |
+| attention | /attention |
+| compliance | /compliance |
+| activity | /activity |
+| help | /help |
+| show | /show |
+| search | /search |
+| evidence | /evidence |
+| weekly review | /weekly-review |
+| add study | /add-study |
+| add note | /add-note |
+| add finding | /add-finding |
+| cite | /cite |
+| review note | /review-note |
+| approve finding | /approve-finding |
+| add decision | /add-decision |
+| close decision | /close-decision |
+| log | /log |
+| import | /import |
+| export | /export |
+| draft brief | /draft-brief |
+| draft follow up | /draft-follow-up |
+| customise | /customise |
+| new view | /new-view |
+| docs | /docs |
+| view | /view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+## Boundaries
 
-## Hard rules
+Writes identify the operator through --actor. These names are an internal record, not authentication or a tamper-proof audit. Another name must review a finding. Never approve without the operator asking to record a real review. Respect the documented collection purpose and the source owner's restrictions. No sends, publication, recruitment, contact with participants, transcription services or live connections. Drafts stay in drafts/. No personal details in git. Never seed a real business database.
 
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
+Use a dedicated owner-controlled database and restrict filesystem access. RLS is enabled without public policies. This is not a multi-user permission system. Read docs/compliance.md before interpreting its checks.
 
-## Where things live
+## Implementation
 
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off Dovetail.
+scripts/research.mjs is the only domain CLI. supabase/migrations contains forward migrations. scripts/lib/db.mjs chooses local PGlite or DATABASE_URL for PostgreSQL. views.json and documents.json use the shared renderer. Run npm test after changes. Use --json for machine output.
 
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/dovetail
+Built and run through Omni by Enterprise DNA: https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=dovetail
